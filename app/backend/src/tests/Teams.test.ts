@@ -15,7 +15,7 @@ const { expect } = chai;
 describe('Seu teste', () => {
   let chaiHttpResponse: Response;
 
-  before(async () => {
+  beforeEach(async () => {
      sinon
        .stub(Team, "findOne")
        .resolves({
@@ -24,7 +24,7 @@ describe('Seu teste', () => {
        } as Team);
    });
 
-   after(()=>{
+   afterEach(()=>{
      (Team.findOne as sinon.SinonStub).restore();
    })
 
@@ -33,6 +33,12 @@ describe('Seu teste', () => {
        .request(app).get('/teams')
      expect(chaiHttpResponse.status).to.be.eq(200);
    });
+
+   it('Testa o GET da rota teams/:id', async () => {
+      chaiHttpResponse = await chai
+        .request(app).get('/teams/2')
+      expect(chaiHttpResponse.status).to.be.eq(200);
+    });
 
   it('Seu sub-teste', () => {
     expect(false).to.be.eq(true);
