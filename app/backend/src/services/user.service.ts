@@ -13,19 +13,27 @@ class UserService {
     const user = await this.model.findOne({ where: { email: login.email } });
     const error = validateLogin(login);
     if (error) {
-      return { status: 401, message: 'Invalid email or password' };
+      return UserService.createErrorResponse(401, 'Invalid email or password');
     }
 
     const passwordMatch = bcrypt.compareSync(login.password, user?.password || '_');
 
     if (!user || !passwordMatch) {
-      return { status: 401, message: 'Invalid email or password' };
+      return UserService.createErrorResponse(401, 'Invalid email or password');
     }
 
     const { id, email, role, username } = user;
     const token = generateToken({ id, email, role, username });
 
-    return { status: 200, message: { token } };
+    return UserService.createSuccessResponse(200, { token });
+  }
+
+  private static createSuccessResponse(status: number, message: unknown): IResponse {
+    return { status, message };
+  }
+
+  private static createErrorResponse(status: number, message: unknown): IResponse {
+    return UserService.createSuccessResponse(status, { message });
   }
 }
 
