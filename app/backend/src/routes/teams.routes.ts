@@ -5,9 +5,9 @@ import TeamsService from '../services';
 const teamsService = new TeamsService();
 const teamsController = new TeamsController(teamsService);
 
-const TeamRouter = Router();
+const teamRouter = Router();
 
-TeamRouter.get('/teams', (req: Request, res: Response) => teamsController.get(req, res));
-TeamRouter.get('/teams/:id', (req: Request, res: Response) => teamsController.getById(req, res));
+teamRouter.get('/teams', (req: Request, res: Response) => teamsController.get(req, res));
+teamRouter.get('/teams/:id', (req: Request, res: Response) => teamsController.getById(req, res));
 
-export default TeamRouter;
+export default teamRouter;
