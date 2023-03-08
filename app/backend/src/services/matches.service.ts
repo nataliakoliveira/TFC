@@ -3,6 +3,7 @@ import Team from '../database/models/Team';
 import Matches from '../database/models/matches';
 import IResponse from '../interfaces/IResponse';
 import IUpdate from '../interfaces/IUpdate';
+import ICreate from '../interfaces/ICreate';
 
 class MatchService {
   protected model: ModelStatic<Matches> = Matches;
@@ -57,6 +58,11 @@ class MatchService {
     }
 
     return { status: 400, message: 'Match already finished' };
+  }
+
+  async createMatch(body: ICreate): Promise<IResponse> {
+    const match = await this.model.create({ ...body, inProgress: true });
+    return { status: 201, message: match };
   }
 }
 

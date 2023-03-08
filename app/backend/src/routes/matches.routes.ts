@@ -11,5 +11,6 @@ matchRouter.patch('/matches/:id/finish', tokenValidation, matchController
   .finishMatch.bind(matchController));
 matchRouter.patch('/matches/:id', tokenValidation, matchController
   .updateMatch.bind(matchController));
+matchRouter.post('/matches', tokenValidation, matchController.createMatch.bind(matchController));
 
 export default matchRouter;
