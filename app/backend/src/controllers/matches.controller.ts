@@ -4,8 +4,9 @@ import MatchService from '../services/matches.service';
 class MatchController {
   constructor(private matchesService = new MatchService()) {}
 
-  async getAll(_req: Request, res: Response) {
-    const matches = await this.matchesService.getAll();
+  async getAll(req: Request, res: Response) {
+    const { inProgress } = req.query;
+    const matches = await this.matchesService.getAll(inProgress as string);
     res.status(matches.status).json(matches.message);
   }
 }
