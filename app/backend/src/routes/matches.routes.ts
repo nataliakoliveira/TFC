@@ -9,5 +9,7 @@ const matchRouter = Router();
 matchRouter.get('/matches', matchController.getAll.bind(matchController));
 matchRouter.patch('/matches/:id/finish', tokenValidation, matchController
   .finishMatch.bind(matchController));
+matchRouter.patch('/matches/:id', tokenValidation, matchController
+  .updateMatch.bind(matchController));
 
 export default matchRouter;
