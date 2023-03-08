@@ -9,6 +9,12 @@ class MatchController {
     const matches = await this.matchesService.getAll(inProgress as string);
     res.status(matches.status).json(matches.message);
   }
+
+  async finishMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const matches = await this.matchesService.finishMatch(Number(id));
+    res.status(matches.status).json(matches.message);
+  }
 }
 
 export default MatchController;
