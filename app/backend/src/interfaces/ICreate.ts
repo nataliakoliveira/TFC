@@ -1,8 +1,8 @@
 export default interface ICreate {
   id: number;
   homeTeamId: number;
-  awayTeamId: number;
   homeTeamGoals: number;
+  awayTeamId: number;
   awayTeamGoals: number;
   inProgress: boolean;
 }

@@ -61,8 +61,30 @@ class MatchService {
   }
 
   async createMatch(body: ICreate): Promise<IResponse> {
+    if (body.homeTeamId === body.awayTeamId) {
+      return MatchService.createErrorResponse(
+        422,
+        'It is not possible to create a match with two equal teams',
+      );
+    }
+
+    const homeTeam = await this.model.findByPk(body.homeTeamId);
+    const awayTeam = await this.model.findByPk(body.awayTeamId);
+
+    if (!homeTeam || !awayTeam) {
+      return MatchService.createErrorResponse(404, 'There is no team with such id!');
+    }
+
     const match = await this.model.create({ ...body, inProgress: true });
     return { status: 201, message: match };
+  }
+
+  private static createSuccessResponse(status: number, message: unknown): IResponse {
+    return { status, message };
+  }
+
+  private static createErrorResponse(status: number, message: unknown): IResponse {
+    return MatchService.createSuccessResponse(status, { message });
   }
 }
 
