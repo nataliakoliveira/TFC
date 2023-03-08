@@ -26,8 +26,19 @@ class MatchService {
   }
 
   async finishMatch(id: number): Promise<IResponse> {
-    await this.model.update({ inProgress: false }, { where: { id } });
-    return { status: 200, message: 'Finished' };
+    const match = await this.model.findByPk(id);
+
+    if (!match) {
+      return { status: 404, message: 'Match not found' };
+    }
+
+    if (match.inProgress) {
+      match.inProgress = false;
+      await match.save();
+      return { status: 200, message: 'Match finished' };
+    }
+
+    return { status: 400, message: 'Match already finished' };
   }
 }
 
