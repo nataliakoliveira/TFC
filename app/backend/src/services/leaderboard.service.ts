@@ -43,7 +43,7 @@ class LeaderboardService {
   private team: ModelStatic<Team> = Team;
   private matches: ModelStatic<Matches> = Matches;
 
-  async calculateLeaderboard(): Promise<IResponse> {
+  async calculateLeaderboardHome(): Promise<IResponse> {
     const [teams, matches] = await Promise.all([
       this.team.findAll(),
       this.matches.findAll({ where: { inProgress: false } }),
@@ -51,6 +51,21 @@ class LeaderboardService {
 
     const result: ILeaderboard[] = teams.map((team) => {
       const teamMatches = matches.filter((match) => match.homeTeamId === team.id);
+      const teamResults = getMatchResults(teamMatches);
+      return calculateRanking(team, teamResults, teamMatches);
+    });
+
+    return LeaderboardService.createSuccessResponse(200, result);
+  }
+
+  async calculateLeaderboardAway(): Promise<IResponse> {
+    const [teams, matches] = await Promise.all([
+      this.team.findAll(),
+      this.matches.findAll({ where: { inProgress: false } }),
+    ]);
+
+    const result: ILeaderboard[] = teams.map((team) => {
+      const teamMatches = matches.filter((match) => match.awayTeamId === team.id);
       const teamResults = getMatchResults(teamMatches);
       return calculateRanking(team, teamResults, teamMatches);
     });
